@@ -1,0 +1,5 @@
+// ormconfig.ts
+module.exports = {
+   
+  };
+  
