@@ -4,13 +4,13 @@ import { Repository } from 'typeorm';
 import { StoreVisit } from './store-visit.entity';
 import { ICustomerWalkin, IStoreVisit } from './store-visit.interface';
 import { StoreSSIDService } from 'src/store-ssid/store-ssid.service';
-
+import { Cron, CronExpression } from '@nestjs/schedule';
 @Injectable()
 export class StoreVisitService {
     constructor(
         @InjectRepository(StoreVisit)
         private storeVisitRepository: Repository<StoreVisit>,
-        private storeSSIDService : StoreSSIDService
+        private storeSSIDService: StoreSSIDService
     ) { }
 
     async findAll(): Promise<StoreVisit[]> {
@@ -43,14 +43,14 @@ export class StoreVisitService {
             }, {
                 walkinId: data.walkinId,
             });
-        } catch(error) {
+        } catch (error) {
             throw new InternalServerErrorException('Failed to fetch the storeVisit.');
         }
     }
 
     async getNearbyCustomer(storeId: number) {
         try {
-            return await this.storeVisitRepository.find({where: { storeId: storeId, isCheckedIn: false, hasPurchased: false, isExpired: false}})
+            return await this.storeVisitRepository.find({ where: { storeId: storeId, isCheckedIn: false, hasPurchased: false, isExpired: false } })
         } catch (error) {
             throw new InternalServerErrorException('Failed to fetch the storeVisit.');
         }
@@ -64,9 +64,9 @@ export class StoreVisitService {
             await this.storeVisitRepository.save(storeVisit);
         } catch (error) {
             console.log(error);
-          throw new InternalServerErrorException('Failed to create the storeVisit.');
+            throw new InternalServerErrorException('Failed to create the storeVisit.');
         }
-    }    
+    }
 
     async update(id: number, storeVisit: StoreVisit): Promise<StoreVisit> {
         try {
@@ -86,6 +86,15 @@ export class StoreVisitService {
             await this.storeVisitRepository.remove(storeVisit);
         } catch (error) {
             throw new InternalServerErrorException('Failed to delete the storeVisit.');
+        }
+    }
+
+    @Cron(CronExpression.EVERY_30_MINUTES)
+    async handleCron() {
+        try {
+            await this.storeVisitRepository.update({ isExpired: false }, { isExpired: true });
+        } catch (error) {
+            console.error('Error updating isExpired property:', error.message);
         }
     }
 }

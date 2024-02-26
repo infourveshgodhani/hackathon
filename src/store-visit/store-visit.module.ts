@@ -5,9 +5,10 @@ import { StoreVisit } from './store-visit.entity';
 import { StoreVisitController } from './store-visit.controller';
 import { StoreVisitService } from './store-visit.service';
 import { StoreSSIDModule } from 'src/store-ssid/store-ssid.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([StoreVisit]), StoreSSIDModule],
+  imports: [TypeOrmModule.forFeature([StoreVisit]), StoreSSIDModule, ScheduleModule.forRoot()],
   controllers: [StoreVisitController],
   providers: [StoreVisitService],
   exports: [StoreVisitService]
