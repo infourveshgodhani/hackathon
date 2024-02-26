@@ -1,14 +1,17 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ItemsModule } from './items/items.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-
+import { StoreSSIDModule } from './store-ssid/store-ssid.module';
+import { StoreSSIDController } from './store-ssid/store-ssid.controller';
+import { StoreSSIDService } from './store-ssid/store-ssid.service';
+import { StoreVisitModule } from './store-visit/store-visit.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    ItemsModule,
+    StoreSSIDModule,
+    StoreVisitModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
