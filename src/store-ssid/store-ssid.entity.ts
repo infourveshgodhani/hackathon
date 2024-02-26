@@ -5,10 +5,10 @@ export class StoreSSID {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({unique: true})
   storeid: number;
 
-  @Column()
+  @Column({unique: true})
   ssid: number;
 
   @CreateDateColumn({ type: 'timestamp' })

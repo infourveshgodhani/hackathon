@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, Patch } from '@nestjs/common';
 import { StoreVisitService } from './store-visit.service';
 import { StoreVisit } from './store-visit.entity';
-import { IStoreVisit } from './store-visit.interface';
+import { ICustomerWalkin, IStoreVisit } from './store-visit.interface';
 
 @Controller('storeVisit')
 export class StoreVisitController {
@@ -20,6 +20,12 @@ export class StoreVisitController {
   @Get(':id')
   nearByCustomer(@Param('id') id: string){
     return this.storeVisitService.getNearbyCustomer(+id)
+  }
+
+  @Patch()
+  walkInUpdate(@Body() data: ICustomerWalkin) {
+    
+    this.storeVisitService.walkInUpdate(data)
   }
 
   @Put(':id')

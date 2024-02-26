@@ -13,3 +13,7 @@ export interface IStoreVisit {
     updated_at?: Date;
 }
   
+export interface ICustomerWalkin {
+    walkinId: number;
+    customerId: number;
+}

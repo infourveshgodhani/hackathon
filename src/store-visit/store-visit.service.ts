@@ -2,7 +2,7 @@ import { Injectable, NotFoundException, InternalServerErrorException } from '@ne
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { StoreVisit } from './store-visit.entity';
-import { IStoreVisit } from './store-visit.interface';
+import { ICustomerWalkin, IStoreVisit } from './store-visit.interface';
 import { StoreSSIDService } from 'src/store-ssid/store-ssid.service';
 
 @Injectable()
@@ -32,6 +32,19 @@ export class StoreVisitService {
             return storeVisit;
         } catch (error) {
             throw new InternalServerErrorException('Failed to retrieve the storeVisit.');
+        }
+    }
+
+    async walkInUpdate(data: ICustomerWalkin) {
+        try {
+            await this.storeVisitRepository.update({
+                customerId: data.customerId,
+                isExpired: false
+            }, {
+                walkinId: data.walkinId,
+            });
+        } catch(error) {
+            throw new InternalServerErrorException('Failed to fetch the storeVisit.');
         }
     }
 
